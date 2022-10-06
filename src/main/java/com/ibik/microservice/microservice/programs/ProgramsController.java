@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/programs")
+@RequestMapping("/api/students")
 public class ProgramsController {
   
   // @GetMapping
@@ -23,23 +23,23 @@ public class ProgramsController {
   private ProgramsServices programsServices;
 
   @PostMapping
-  public Programs postPrograms(@RequestBody Programs programs){
+  public Students postPrograms(@RequestBody Students programs){
     return programsServices.save(programs);
   }
 
   @GetMapping
-  public Iterable<Programs> fetchPrograms(){
+  public Iterable<Students> fetchPrograms(){
     return programsServices.findAll();
     
   }
 
   @GetMapping("/{id}")
-  public Programs fetchProgramsById(@PathVariable("id") int id){
+  public Students fetchProgramsById(@PathVariable("id") int id){
     return programsServices.findOne(id);
   }
 
   @PutMapping
-  public Programs updatePrograms(@RequestBody Programs programs){
+  public Students updatePrograms(@RequestBody Students programs){
     return programsServices.save(programs);
   }
 

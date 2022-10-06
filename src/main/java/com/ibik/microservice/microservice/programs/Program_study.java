@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="programs")
+@Table(name="program_study")
 public class Program_study implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -19,13 +19,13 @@ public class Program_study implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @Column(length = 20)
+  @Column(length = 50)
   private String name;
 
   @Column(length = 20)
   private String description;
 
-  @Column(length = 20)
+  @Column(length = 5)
   private String code;
 
   public Program_study() {
