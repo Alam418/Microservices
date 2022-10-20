@@ -9,6 +9,16 @@
       "projectName": "microservice",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-MicroserviceApplication<microservice>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.ibik.api.microservice.MicroserviceApplication",
+      "projectName": "microservice",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

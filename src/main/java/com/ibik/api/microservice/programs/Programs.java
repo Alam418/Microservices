@@ -1,4 +1,4 @@
-package com.ibik.microservice.microservice.programs;
+package com.ibik.api.microservice.programs;
 
 import java.io.Serializable;
 
@@ -8,10 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name="program_study")
-public class Program_study implements Serializable {
+@Table(name="programs")
+public class Programs implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -19,23 +20,28 @@ public class Program_study implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @Column(length = 50)
+  @Column(length = 20)
+  @NotEmpty(message = "NPM is required")
   private String name;
 
   @Column(length = 20)
   private String description;
+  
+  @Column(nullable = false, columnDefinition = "TINYINT(1)")
+  private boolean is_active;
 
-  @Column(length = 5)
-  private String code;
-
-  public Program_study() {
+  public Programs() {
   }
 
-  public Program_study(int id, String name, String description, String code) {
+  public Programs(int id, String name, String description, boolean is_active) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.code = code;
+    this.is_active = is_active;
+  }
+
+  public static long getSerialversionuid() {
+    return serialVersionUID;
   }
 
   public int getId() {
@@ -62,15 +68,13 @@ public class Program_study implements Serializable {
     this.description = description;
   }
 
-  public String getCode() {
-    return code;
+  public boolean isIs_active() {
+    return is_active;
   }
 
-  public void setCode(String code) {
-    this.code = code;
+  public void setIs_active(boolean is_active) {
+    this.is_active = is_active;
   }
-
-  
 
   
 
