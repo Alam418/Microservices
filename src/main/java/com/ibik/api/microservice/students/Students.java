@@ -36,11 +36,11 @@ public class Students implements Serializable {
   @NotEmpty(message = "Lastname is required")
   private String lastname;
 
-  @Min(value = 1, message = "Program is required")
-  private int program_id;
+  // @Min(value = 1, message = "Program is required")
+  // private int program_id;
 
-  @Min(value = 1, message = "Departement is required")
-  private int departement_id;
+  // @Min(value = 1, message = "Departement is required")
+  // private int departement_id;
 
   public Students() {
   }
@@ -55,8 +55,8 @@ public class Students implements Serializable {
     this.firstname = firstname;
     this.middlename = middlename;
     this.lastname = lastname;
-    this.program_id = program_id;
-    this.departement_id = departement_id;
+    // this.program_id = program_id;
+    // this.departement_id = departement_id;
   }
 
   public static long getSerialversionuid() {
@@ -103,20 +103,20 @@ public class Students implements Serializable {
     this.lastname = lastname;
   }
 
-  public int getProgram_id() {
-    return program_id;
-  }
+  // public int getProgram_id() {
+  //   return program_id;
+  // }
 
-  public void setProgram_id(int program_id) {
-    this.program_id = program_id;
-  }
+  // public void setProgram_id(int program_id) {
+  //   this.program_id = program_id;
+  // }
 
-  public int getDepartement_id() {
-    return departement_id;
-  }
+  // public int getDepartement_id() {
+  //   return departement_id;
+  // }
 
-  public void setDepartement_id(int departement_id) {
-    this.departement_id = departement_id;
-  }
+  // public void setDepartement_id(int departement_id) {
+  //   this.departement_id = departement_id;
+  // }
   
 }

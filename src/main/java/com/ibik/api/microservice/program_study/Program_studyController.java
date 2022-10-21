@@ -25,57 +25,152 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/program_study")
 public class Program_studyController {
-  
+
   // @GetMapping
   // public String helloWorld(){
-  //   return "<h1>Hello World</h1>";
+  // return "<h1>Hello World</h1>";
   // }
 
   @Autowired
   private Program_studyServices program_studyServices;
 
   @PostMapping
-  // public Program_study postPrograms(@Valid @RequestBody Program_study program_study, Errors errors){
-    public ResponseEntity<ResponseData<Program_study>> postPrograms(@Valid @RequestBody Program_study students, Errors errors){
+  // public Program_study postPrograms(@Valid @RequestBody Program_study programs,
+  // Errors errors){
+  public ResponseEntity<ResponseData<Program_study>> postPrograms(@Valid @RequestBody Program_study program_study,Errors errors) {
     ResponseData<Program_study> responseData = new ResponseData<>();
 
-    if(errors.hasErrors()){
-      for(ObjectError error : errors.getAllErrors()){
+    if (errors.hasErrors()) {
+      for (ObjectError error : errors.getAllErrors()) {
         responseData.getMessage().add(error.getDefaultMessage());
-        // System.out.println(error.getDefaultMessage());
       }
 
+      responseData.setResult(false);
+      responseData.setData(null);
+
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-      // throw new RuntimeException("Validation Error");
     }
-    
+
+    responseData.setResult(true);
     List<Program_study> value = new ArrayList<>();
-    value.add(program_studyServices.save(students));
+    value.add(program_studyServices.save(program_study));
     responseData.setData(value);
     return ResponseEntity.ok(responseData);
 
-    // return program_studyServices.save(program_study);
+    // return studentsServices.save(programs);
   }
 
   @GetMapping
-  public Iterable<Program_study> fetchPrograms(){
-    return program_studyServices.findAll();
-    
+  public ResponseEntity<ResponseData<Program_study>> fetchPrograms() {
+    ResponseData<Program_study> responseData = new ResponseData<>();
+
+    try {
+      responseData.setResult(true);
+      responseData.setMessage(null);
+      List<Program_study> value = (List<Program_study>) program_studyServices.findAll();
+      responseData.setData(value);
+
+      return ResponseEntity.ok(responseData);
+
+    } catch (Exception e) {
+      responseData.setResult(false);
+      responseData.getMessage().add(e.getMessage());
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+
+    }
+    // return studentsServices.findAll();
   }
 
   @GetMapping("/{id}")
-  public Program_study fetchProgramsById(@PathVariable("id") int id){
-    return program_studyServices.findOne(id);
+  // public Program_study fetchProgramsById(@PathVariable("id") int id) {
+  public ResponseEntity<ResponseData<Program_study>> postPrograms(@Valid @PathVariable("id") int id,
+      Program_study program_study,
+      Errors errors) {
+    ResponseData<Program_study> responseData = new ResponseData<>();
+
+    try {
+      responseData.setResult(true);
+      List<Program_study> value = new ArrayList<>();
+      value.add(program_studyServices.findOne(id));
+
+      responseData.setData(value);
+
+      return ResponseEntity.ok(responseData);
+    } catch (Exception e) {
+      responseData.setResult(false);
+      responseData.getMessage().add(e.getMessage());
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+
+    }
+    // return program_studyServices.findOne(id);
   }
 
   @PutMapping
-  public Program_study updatePrograms(@RequestBody Program_study program_study){
-    return program_studyServices.save(program_study);
+  public ResponseEntity<ResponseData<Program_study>> updatePrograms(@Valid @RequestBody Program_study program_study,
+      Errors errors) {
+    ResponseData<Program_study> responseData = new ResponseData<>();
+
+    if (program_study.getId() != 0) {
+
+      if (errors.hasErrors()) {
+        for (ObjectError error : errors.getAllErrors()) {
+          responseData.getMessage().add(error.getDefaultMessage());
+        }
+        responseData.setResult(false);
+        responseData.setData(null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+      }
+
+      responseData.setResult(true);
+      List<Program_study> value = new ArrayList<>();
+      value.add(program_studyServices.save(program_study));
+      responseData.setData(value);
+      return ResponseEntity.ok(responseData);
+
+    } else {
+      responseData.setResult(false);
+      responseData.setData(null);
+      List<String> message = new ArrayList<>();
+      message.add("ID is required");
+      responseData.setMessage(message);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+    }
+
+    // return program_studyServices.save(programs);
   }
 
   @DeleteMapping("/{id}")
-  public void deleteProgramsById(@PathVariable("id") int id){
-    program_studyServices.removeOne(id);
+  // public void deleteProgramsById(@PathVariable("id") int id) {
+  public ResponseEntity<ResponseData<Program_study>> deleteStudentsById(@PathVariable("id") int id) {
+    ResponseData<Program_study> responseData = new ResponseData<>();
+
+    if (id != 0) {
+      try {
+        program_studyServices.removeOne(id);
+        responseData.setResult(true);
+        responseData.getMessage().add("Successfully Removed");
+
+        return ResponseEntity.ok(responseData);
+
+      } catch (Exception e) {
+        responseData.setResult(false);
+        responseData.getMessage().add(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+
+      }
+
+    } else {
+      List<String> message = new ArrayList<>();
+      message.add("ID is required");
+      responseData.setMessage(message);
+      responseData.setData(null);
+      responseData.setResult(false);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+    }
+    // program_studyServices.removeOne(id);
   }
 
 }

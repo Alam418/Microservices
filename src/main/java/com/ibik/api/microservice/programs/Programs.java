@@ -21,7 +21,7 @@ public class Programs implements Serializable {
   private int id;
 
   @Column(length = 20)
-  @NotEmpty(message = "NPM is required")
+  @NotEmpty(message = "name is required")
   private String name;
 
   @Column(length = 20)

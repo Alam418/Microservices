@@ -45,11 +45,14 @@ public class StudentsController {
         responseData.getMessage().add(error.getDefaultMessage());
         // System.out.println(error.getDefaultMessage());
       }
+      responseData.setResult(false);
+      responseData.setData(null);
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
       // throw new RuntimeException("Validation Error");
     }
 
+    responseData.setResult(true);
     List<Students> value = new ArrayList<>();
     value.add(studentsServices.save(students));
     responseData.setData(value);
@@ -59,42 +62,112 @@ public class StudentsController {
   }
 
   @GetMapping
-  public Iterable<Students> fetchPrograms() {
-    return studentsServices.findAll();
+  public ResponseEntity<ResponseData<Students>> fetchPrograms() {
+    ResponseData<Students> responseData = new ResponseData<>();
+
+    try {
+      responseData.setResult(true);
+      responseData.setMessage(null);
+      List<Students> value = (List<Students>) studentsServices.findAll();
+      responseData.setData(value);
+
+      return ResponseEntity.ok(responseData);
+
+    } catch (Exception e) {
+      responseData.setResult(false);
+      responseData.getMessage().add(e.getMessage());
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+
+    }
+    // return studentsServices.findAll();
   }
 
   @GetMapping("/{id}")
   // public Students fetchProgramsById(@PathVariable("id") int id) {
-  public ResponseEntity<ResponseData<Students>> postPrograms(@Valid @PathVariable("id") int id, Students students, Errors errors) {
+  public ResponseEntity<ResponseData<Students>> postPrograms(@Valid @PathVariable("id") int id, Students students,
+      Errors errors) {
     ResponseData<Students> responseData = new ResponseData<>();
 
-    if (errors.hasErrors()) {
-      for (ObjectError error : errors.getAllErrors()) {
-        responseData.getMessage().add(error.getDefaultMessage());
-        // System.out.println(error.getDefaultMessage());
-      }
+    try {
+      responseData.setResult(true);
+      List<Students> value = new ArrayList<>();
+      value.add(studentsServices.findOne(id));
+
+      responseData.setData(value);
+
+      return ResponseEntity.ok(responseData);
+    } catch (Exception e) {
+      responseData.setResult(false);
+      responseData.getMessage().add(e.getMessage());
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
-      // return ResponseEntity.status(HttpStatus.BAD_REQUEST).message("No Value present");
-      // throw new RuntimeException("No Value Present");
+
     }
-
-    List<Students> value = new ArrayList<>();
-    value.add(studentsServices.findOne(id));
-    responseData.setData(value);
-    return ResponseEntity.ok(responseData);
-
     // return studentsServices.findOne(id);
   }
 
   @PutMapping
-  public Students updatePrograms(@RequestBody Students programs) {
-    return studentsServices.save(programs);
+  public ResponseEntity<ResponseData<Students>> updateStudent(@Valid @RequestBody Students students, Errors errors) {
+    ResponseData<Students> responseData = new ResponseData<>();
+
+    if (students.getId() != 0) {
+
+      if (errors.hasErrors()) {
+        for (ObjectError error : errors.getAllErrors()) {
+          responseData.getMessage().add(error.getDefaultMessage());
+        }
+        responseData.setResult(false);
+        responseData.setData(null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+      }
+
+      responseData.setResult(true);
+      List<Students> value = new ArrayList<>();
+      value.add(studentsServices.save(students));
+      responseData.setData(value);
+      return ResponseEntity.ok(responseData);
+
+    } else {
+      responseData.setResult(false);
+      responseData.setData(null);
+      List<String> message = new ArrayList<>();
+      message.add("ID is required");
+      responseData.setMessage(message);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+    }
   }
 
   @DeleteMapping("/{id}")
-  public void deleteProgramsById(@PathVariable("id") int id) {
-    studentsServices.removeOne(id);
+  // public void deleteProgramsById(@PathVariable("id") int id) {
+  public ResponseEntity<ResponseData<Students>> deleteStudentsById(@PathVariable("id") int id) {
+    ResponseData<Students> responseData = new ResponseData<>();
+
+    if (id != 0) {
+      try {
+        studentsServices.removeOne(id);
+        responseData.setResult(true);
+        responseData.getMessage().add("Successfully Removed");
+
+        return ResponseEntity.ok(responseData);
+
+      } catch (Exception e) {
+        responseData.setResult(false);
+        responseData.getMessage().add(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+
+      }
+
+    } else {
+      List<String> message = new ArrayList<>();
+      message.add("ID is required");
+      responseData.setMessage(message);
+      responseData.setData(null);
+      responseData.setResult(false);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+    }
+    // studentsServices.removeOne(id);
   }
 
 }
