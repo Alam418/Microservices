@@ -1,15 +1,20 @@
 package com.ibik.api.microservice.program_study;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+
+import com.ibik.api.microservice.programs.Programs;
 
 @Entity
 @Table(name = "program_study")
@@ -33,33 +38,30 @@ public class Program_study implements Serializable {
   private String code;
 
   // @Min(value = 1, message = "Program is required")
-  // private int program_id;
+  @ManyToOne
+  @JoinColumn(name = "program_id")
+  private Programs program_id;
 
-  // @Min(value = 1, message = "Program is required")
+  @OneToMany
+  @JoinColumn(name = "faculty_id")
+  private Set<Program_study> Departments;
+
+  @Column(nullable = false, columnDefinition = "TINYINT(1)")
+  private boolean is_active;
+
   // private int faculty_id;
-
-  // @Min(value = 1, message = "Departement is required")
-  // private int departement_id;
-
-  // @Column(nullable = false, columnDefinition = "TINYINT(1)")
-  // private boolean is_active;
 
   public Program_study() {
   }
 
   public Program_study(int id, @NotEmpty(message = "Name is required") String name, String description,
-      @NotEmpty(message = "Code is required") String code,
-      @Min(value = 1, message = "Program is required") int program_id,
-      @Min(value = 1, message = "Program is required") int faculty_id,
-      @Min(value = 1, message = "Departement is required") int departement_id, boolean is_active) {
+      @NotEmpty(message = "Code is required") String code, int program_id, int faculty_id, int department_id,
+      boolean is_active) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.code = code;
-    // this.program_id = program_id;
-    // this.faculty_id = faculty_id;
-    // this.departement_id = departement_id;
-    // this.is_active = is_active;
+    this.is_active = is_active;
   }
 
   public static long getSerialversionuid() {
@@ -98,13 +100,29 @@ public class Program_study implements Serializable {
     this.code = code;
   }
 
-  // public int getProgram_id() {
-  // return program_id;
-  // }
+  public Programs getProgram_id() {
+    return program_id;
+  }
 
-  // public void setProgram_id(int program_id) {
-  // this.program_id = program_id;
-  // }
+  public void setProgram_id(Programs program_id) {
+    this.program_id = program_id;
+  }
+
+  public boolean isIs_active() {
+    return is_active;
+  }
+
+  public void setIs_active(boolean is_active) {
+    this.is_active = is_active;
+  }
+
+  public Set<Program_study> getDepartments() {
+    return Departments;
+  }
+
+  public void setDepartments(Set<Program_study> departments) {
+    Departments = departments;
+  }
 
   // public int getFaculty_id() {
   // return faculty_id;
@@ -114,20 +132,13 @@ public class Program_study implements Serializable {
   // this.faculty_id = faculty_id;
   // }
 
-  // public int getDepartement_id() {
-  // return departement_id;
-  // }
+  // @Min(value = 1, message = "Program is required")
+  // private int faculty_id;
 
-  // public void setDepartement_id(int departement_id) {
-  // this.departement_id = departement_id;
-  // }
+  // @Min(value = 1, message = "Departement is required")
+  // private int departement_id;
 
-  // public boolean isIs_active() {
-  // return is_active;
-  // }
-
-  // public void setIs_active(boolean is_active) {
-  // this.is_active = is_active;
-  // }
+  // @Column(nullable = false, columnDefinition = "TINYINT(1)")
+  // private boolean is_active;
 
 }
