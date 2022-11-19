@@ -10,22 +10,26 @@ import org.springframework.stereotype.Service;
 public class StudentsServices {
   
   @Autowired
-  private StudentsRepo programsRepo;
+  private StudentsRepo studentsRepo;
 
   public Students save(Students students){
-    return programsRepo.save(students);
+    return studentsRepo.save(students);
   }
 
   public Students findOne(int id){
-    return programsRepo.findById(id).get();
+    return studentsRepo.findById(id).get();
   }
 
   public Iterable<Students> findAll(){
-    return programsRepo.findAll();
+    return studentsRepo.findAll();
   }
 
   public void removeOne(int id){
-    programsRepo.deleteById(id);
+    studentsRepo.deleteById(id);
+  }
+
+  public Iterable<Students> findByName(String name){
+    return studentsRepo.findStudentByName(name);
   }
 
 }

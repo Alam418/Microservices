@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ibik.api.microservice.dto.ResponseData;
+import com.ibik.api.microservice.dto.SearchData;
 
 import java.util.List;
 
@@ -168,6 +169,27 @@ public class StudentsController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
     }
     // studentsServices.removeOne(id);
+  }
+
+  @PostMapping("/search")
+  public ResponseEntity<ResponseData<Students>> getStudentByName(@RequestBody SearchData searchData) {
+    ResponseData<Students> responseData = new ResponseData<>();
+
+    try{
+      Iterable<Students> values = studentsServices.findByName(searchData.getSearchKey());
+      responseData.setResult(true);
+      responseData.setMessage(null);
+      responseData.setData(values);
+      return ResponseEntity.ok(responseData);
+
+    } catch (Exception e ) {
+      List<String> message = new ArrayList<>();
+      message.add(e.getMessage());
+      responseData.setMessage(message);
+      responseData.setData(null);
+      responseData.setResult(false);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+    }
   }
 
 }
