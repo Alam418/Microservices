@@ -21,7 +21,7 @@ import com.ibik.api.microservice.program_study.Program_study;
 import com.ibik.api.microservice.programs.Programs;
 
 @Entity
-@Table(name="students")
+@Table(name = "students")
 public class Students implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -45,12 +45,16 @@ public class Students implements Serializable {
   @NotEmpty(message = "Lastname is required")
   private String lastname;
 
+  @Column
+  @NotEmpty(message = "Email is required")
+  private String email;
+
+  @Column(columnDefinition = "DATE")
+  @NotEmpty(message = "Birthdate is required")
+  private String birthdate;
+
   @ManyToMany
-    @JoinTable(
-        name = "student_rel_courses",
-        joinColumns = @JoinColumn(name = "student_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
+  @JoinTable(name = "student_rel_courses", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
   private Set<Courses> courses;
 
   @ManyToOne
@@ -70,17 +74,35 @@ public class Students implements Serializable {
   public Students() {
   }
 
+  // public Students(int id, @NotEmpty(message = "NPM is required") String npm,
+  //     @NotEmpty(message = "Firstname is required") String firstname, String middlename,
+  //     @NotEmpty(message = "Lastname is required") String lastname,
+  //     @NotEmpty(message = "Program is required") int program_id,
+  //     @NotEmpty(message = "Department is required") int department_id) {
+  //   this.id = id;
+  //   this.npm = npm;
+  //   this.firstname = firstname;
+  //   this.middlename = middlename;
+  //   this.lastname = lastname;
+  // }
+
   public Students(int id, @NotEmpty(message = "NPM is required") String npm,
-            @NotEmpty(message = "Firstname is required") String firstname, String middlename,
-            @NotEmpty(message = "Lastname is required") String lastname,
-            @NotEmpty(message = "Program is required") int program_id,
-            @NotEmpty(message = "Department is required") int department_id) {
-        this.id = id;
-        this.npm = npm;
-        this.firstname = firstname;
-        this.middlename = middlename;
-        this.lastname = lastname;
-    }
+      @NotEmpty(message = "Firstname is required") String firstname, String middlename,
+      @NotEmpty(message = "Lastname is required") String lastname,
+      @NotEmpty(message = "Email is required") String email,
+      @NotEmpty(message = "Birthdate is required") String birthdate, Set<Courses> courses, Programs program_id,
+      Set<Program_study> program_study) {
+    this.id = id;
+    this.npm = npm;
+    this.firstname = firstname;
+    this.middlename = middlename;
+    this.lastname = lastname;
+    this.email = email;
+    this.birthdate = birthdate;
+    this.courses = courses;
+    this.program_id = program_id;
+    this.program_study = program_study;
+  }
 
   public static long getSerialversionuid() {
     return serialVersionUID;
@@ -150,6 +172,22 @@ public class Students implements Serializable {
     this.program_study = program_study;
   }
 
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getBirthdate() {
+    return birthdate;
+  }
+
+  public void setBirthdate(String birthdate) {
+    this.birthdate = birthdate;
+  }
+
   
-  
+
 }
